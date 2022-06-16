@@ -21,6 +21,8 @@ namespace Statistica_V2
             Console.WriteLine("Pentru a introduce intervale de incredere apasati tasta 3");
             Console.WriteLine("Pentru a verifica prin testul Student(media) apasati tasta 4");
             Console.WriteLine("Pentru a verifica prin testul Helmert(varianta) apasati tasta 5");
+            Console.WriteLine("Pentru date grupate fara numere apasa tasta 6");
+            Console.WriteLine("Pentru calcul PIB apasa tasta 7");
             answer = Convert.ToString(Console.ReadLine());
 
             if (answer == "1")
@@ -764,9 +766,206 @@ namespace Statistica_V2
             }
 
 
-            Console.ReadKey();
-            System.Threading.Thread.Sleep(-1);
+         
 
+            if (answer == "6")
+            {
+                double suma_xi_ni = 0;
+                int n = 0;
+                
+                Console.WriteLine("Introduceti numarul intervale ale esantionului: ");
+                n = Convert.ToInt32(Console.ReadLine());
+                List<double> lim_inf_int = new List<double>();
+                List<double> lim_sup_int = new List<double>();
+                List<double> lista_xi = new List<double>();
+                List<int> lista_ni = new List<int>();
+                List<int> lista_Cni = new List<int>();
+                List<double> lista_xi_ni = new List<double>();
+                List<double> lista_xi_media = new List<double>();
+                List<double> lista_xi_media_patrat = new List<double>();
+                List<double> lista_xi_media_patrat_ni = new List<double>();
+                int suma_ni=0;
+                float n_2 = 0;
+                
+                double lim_inf_int_med = 0;
+                double lim_sup_int_med = 0;
+                int suma_cni = 0;
+                for (int i = 0; i < n; i++)
+                {
+                    Console.WriteLine("Introduceti limita inferioara a intervalului " + i + " :");
+                    lim_inf_int.Add(Convert.ToDouble(Console.ReadLine()));
+                    Console.WriteLine("Introduceti limita superioara a intervalului " + i + " :");
+                    lim_sup_int.Add(Convert.ToDouble(Console.ReadLine()));
+                    Console.WriteLine("Introduceti frecventa absoluta pentru intervalul" + i + " :");
+                    lista_ni.Add(Convert.ToInt32(Console.ReadLine()));
+                    double xi;
+                    xi = (lim_inf_int[i] + lim_sup_int[i]) / 2;
+                    lista_xi.Add(xi);
+                    xi = 0;
+                    suma_cni += lista_ni[i];
+                    suma_ni += lista_ni[i];
+                    if (i != 0)
+                    {
+                        lista_Cni.Add(suma_cni);
+                        //lista_Cni.Add(lista_ni[i - 1] + lista_ni[i]);
+                    }
+                    else if (i == 0)
+                    {
+                        lista_Cni.Add(lista_ni[i]);
+                    }
+                    lista_xi_ni.Add(lista_xi[i] * Convert.ToDouble(lista_ni[i]));
+                    suma_xi_ni += lista_xi_ni[i];
+                    
+                }
+
+
+
+                n_2 = suma_ni / 2;
+                bool adevarat;
+                adevarat = false;
+                  
+                for (int k = 0; k < lista_ni.Count(); k++)
+                    {
+                      if (lista_Cni[k] > n_2)
+                      {
+                            
+                        lim_inf_int_med = lim_inf_int[k];
+                        lim_sup_int_med = lim_sup_int[k];
+                        break;
+                      }
+                      Console.WriteLine("lim inf int med " + lim_inf_int_med + " lim sup int med " + lim_sup_int_med + " status adevarat " + adevarat);
+                }
+
+
+                double media;
+                float ab_med_patr;
+                media = suma_xi_ni / suma_ni;
+                double suma_xi_media_patrat_ni = 0;
+             //   int h = Math.Ceiling(Convert.ToInt32(lim_sup_int[0] - lim_inf_int[0]));
+                
+                for (int z = 0; z < n;z++)
+                {
+                    lista_xi_media.Add(lista_xi[z] - Convert.ToDouble(media));
+                    lista_xi_media_patrat.Add(lista_xi_media[z] *lista_xi_media[z]);
+                    lista_xi_media_patrat_ni.Add(lista_xi_media_patrat[z] * lista_ni[z]);
+                    suma_xi_media_patrat_ni += lista_xi_media_patrat_ni[z];
+                }
+
+                int ni_max = lista_ni[0];
+                double lim_inf_int_modal = 0;
+                double lim_sup_int_modal = 0;
+                /*
+                for (int f = 1; f < lista_ni.Count();f++)
+                {
+                    if (ni_max < lista_ni[f])
+                    {
+                        ni_max = lista_ni[f];
+                    }
+                    if (f == lista_ni[lista_ni.Count()-1])
+                    {
+                        lim_inf_int_modal = lim_inf_int[f];
+                        lim_sup_int_modal = lim_sup_int[f];
+                        
+                    }
+                    if (ni_max == lista_ni[f+1])
+                    {
+                        Console.WriteLine("Nu exista interval modal.");
+                    }
+                    else if (f == lista_ni[lista_ni.Count()-1])
+                    {
+                        Console.WriteLine("Intervalul modal este [" + lim_inf_int_modal + ";" + lim_sup_int_modal + "].");
+                    }
+                }
+                */
+                float unu_n = 1 / (float)(suma_ni-1);
+                double varianta = unu_n * suma_xi_media_patrat_ni;
+                //Console.WriteLine("Suma xi * ni " + suma_xi_ni + " suma ni este " + suma_ni);
+                Console.WriteLine("Media este " + media);
+                Console.WriteLine("Intervalul median este [" + lim_inf_int_med + ";" + lim_sup_int_med + "].");
+                //Console.WriteLine("Suma xi - media ^ 2 * ni este: " + suma_xi_media_patrat_ni);
+                Console.WriteLine("Varianta este: " + varianta);
+                Console.WriteLine("Abaterea medie patratica este: " + Math.Sqrt(varianta));
+
+              
+                
+
+            }
+            
+            if (answer == "7")
+            {
+                int n = 0;
+                List<double> lista_numere = new List<double>();
+                List<double> lista_coeficient = new List<double>();
+                List<double> lista_pret_comparabil = new List<double>();
+                List<double> indice_baza_fixa = new List<double>();
+                List<double> indice_baza_mobila = new List<double>();
+                List<double> spor_baza_fixa = new List<double>();
+                List<double> spor_baza_mobila = new List<double>();
+                List<double> ritm_baza_fixa = new List<double>();
+                List<double> ritm_baza_mobila = new List<double>();
+                double suma_coef = 0;
+                Console.WriteLine("Introduceti cate date sunt in total: ");
+                n = Convert.ToInt32(Console.ReadLine());
+                double produs_i_b_m = 1;
+                double suma_pret_comp=0;
+                double suma_spor_abs_b_m = 0;
+
+                for (int i = 0; i<n;i++)
+                {
+                    Console.WriteLine("Introduceti numarul " + (i+1) + " : ");
+                    lista_numere.Add(Convert.ToDouble(Console.ReadLine()));
+
+                    Console.WriteLine("Introduceti coeficientul pentru numarul " + (i+1) + ": ");
+                    lista_coeficient.Add(Convert.ToDouble(Console.ReadLine()));
+                    
+                    
+                    if (i == 0)
+                    {
+                        lista_pret_comparabil.Add(lista_numere[i]);
+                        Console.WriteLine("PIB in preturi comparabile pentru anul " + i + " este " + (lista_numere[i]));
+                        Console.WriteLine("Sporul absolut cu baza fixa pentru anul " + i + " este " + lista_numere[i]);
+                        Console.WriteLine("Sporul absolut cu baza mobila pentru anul " + i + " este " + lista_numere[i]);
+                        suma_coef = 1;
+                        
+                    }
+                    else if (i != 0)
+                    {
+                        
+                        suma_coef = suma_coef * lista_coeficient[i];
+                        lista_pret_comparabil.Add(lista_numere[i] / suma_coef);
+                        spor_baza_fixa.Add(lista_pret_comparabil[i] - lista_pret_comparabil[0]);
+                        spor_baza_mobila.Add(lista_pret_comparabil[i] - lista_pret_comparabil[i - 1]);
+                        ritm_baza_fixa.Add((lista_pret_comparabil[i] - lista_pret_comparabil[0]) / lista_pret_comparabil[0]);
+                        ritm_baza_mobila.Add((lista_pret_comparabil[i] - lista_pret_comparabil[i - 1]) / lista_pret_comparabil[i - 1]);
+                        Console.WriteLine("Pib in preturi comparabile pentru anul " + i + "este " + (lista_numere[i] / suma_coef));
+                        Console.WriteLine("Sporul absolut cu baza fixa pentru anul " + i + " este " + Math.Round(spor_baza_fixa[i-1]));
+                        Console.WriteLine("Sporul absolut cu baza mobila pentru anul " + i + " este " + Math.Round(spor_baza_mobila[i-1]));
+                        //Console.WriteLine("an de referinta " + lista_pret_comparabil[0] + " pret comparabil " + lista_pret_comparabil[i] + " pret comparabil an precedent " + lista_pret_comparabil[i - 1]);
+                        indice_baza_fixa.Add(lista_pret_comparabil[i] / lista_pret_comparabil[0]);
+                        indice_baza_mobila.Add(lista_pret_comparabil[i] / lista_pret_comparabil[i - 1]);
+                        produs_i_b_m = produs_i_b_m * indice_baza_mobila[i - 1];
+                        Console.WriteLine("Indicele variabil cu baza fixa pentru anul " + (i + 1) + " este " + Math.Round((decimal)indice_baza_fixa[i-1],2));
+                        Console.WriteLine("Indicele variabil cu baza mobila pentru anul " + (i + 1) + " este " + Math.Round((decimal)indice_baza_mobila[i-1],2));
+                        Console.WriteLine("Ritmul cu baza fixa pentru anul " + i + 1 + " este " + ritm_baza_fixa[i-1]);
+                        Console.WriteLine("Ritmul cu baza mobila pentru anul " + i + 1 + " este " + ritm_baza_mobila[i-1]);
+                        suma_spor_abs_b_m += spor_baza_mobila[i-1];
+                        
+                    }
+                    suma_pret_comp += lista_pret_comparabil[i];
+                    
+                }
+                int n_m_u = n - 1;
+                double nivel_mediu = suma_pret_comp / lista_pret_comparabil.Count();
+                double spor_mediu = Math.Round(suma_spor_abs_b_m / n_m_u,2);
+                float exponent = 1 / (float)n_m_u;
+                double indice_mediu = Math.Pow(produs_i_b_m, exponent);
+                float ritm_mediu = (float)indice_mediu - 1;
+                Console.WriteLine("************ I N D I C A T O R I   M E D I I *************");
+                Console.WriteLine("Nivelul mediu este: " + nivel_mediu);
+                Console.WriteLine("Sporul mediu este: " + spor_mediu);
+                Console.WriteLine("Indicele mediu este: " + indice_mediu);
+                //Console.WriteLine("produs ibm " + produs_i_b_m + " nmu " + n_m_u);
+                Console.WriteLine("Ritmul mediu este: " + ritm_mediu);
 
 
 
@@ -778,6 +977,28 @@ namespace Statistica_V2
 
 
             }
+
+
+            Console.ReadKey();
+            System.Threading.Thread.Sleep(-1);
+
+
+
+
+
+
         }
+
+
+
+          
+
+
+
+
+
+
+        }
+        
     }
 
